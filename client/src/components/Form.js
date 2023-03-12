@@ -1,7 +1,4 @@
 import React from "react";
-import { nanoid } from "nanoid";
-import { getDatabase, child, ref, set, get } from "firebase/database";
-import { isWebUri } from "valid-url";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -32,31 +29,6 @@ class Form extends React.Component {
     if (!isFormValid) {
       return;
     }
-
-    //If the user has input a prefered alias then we use it, if not, we generate one
-    //Be sure to change minilinkit.com to your domain
-    var generatedKey = nanoid(5);
-    var generatedURL = "minilinkit.com/" + generatedKey;
-
-    if (this.state.preferedAlias !== "") {
-      generatedKey = this.state.preferedAlias;
-      generatedURL = "minilinkit.com/" + this.state.preferedAlias;
-    }
-
-    const db = getDatabase();
-    set(ref(db, "/" + generatedKey), {
-      generatedKey: generatedKey,
-      longURL: this.state.longURL,
-      preferedAlias: this.state.preferedAlias,
-      generatedURL: generatedURL,
-    })
-      .then((result) => {
-        this.setState({
-          generatedURL: generatedURL,
-          loading: false,
-        });
-      })
-      .catch((e) => {});
   };
 
   //Checks if feild has an error
@@ -81,29 +53,6 @@ class Form extends React.Component {
     if (this.state.longURL.length === 0) {
       errors.push("longURL");
       errorMessages["longURL"] = "Please enter your URL!";
-    } else if (!isWebUri(this.state.longURL)) {
-      errors.push("longURL");
-      errorMessages["longURL"] = "Please a URL in the form of https://www....";
-    }
-
-    //Prefered Alias
-    if (this.state.preferedAlias !== "") {
-      if (this.state.preferedAlias.length > 7) {
-        errors.push("suggestedAlias");
-        errorMessages["suggestedAlias"] =
-          "Please Enter an Alias less than 7 Characters";
-      } else if (this.state.preferedAlias.indexOf(" ") >= 0) {
-        errors.push("suggestedAlias");
-        errorMessages["suggestedAlias"] = "Spaces are not allowed in URLS";
-      }
-
-      var keyExists = await this.checkKeyExists();
-
-      if (keyExists.exists()) {
-        errors.push("suggestedAlias");
-        errorMessages["suggestedAlias"] =
-          "The Alias you have entered already exists! Please enter another one =-)";
-      }
     }
 
     this.setState({
@@ -117,13 +66,6 @@ class Form extends React.Component {
     }
 
     return true;
-  };
-
-  checkKeyExists = async () => {
-    const dbRef = ref(getDatabase());
-    return get(child(dbRef, `/${this.state.preferedAlias}`)).catch((error) => {
-      return false;
-    });
   };
 
   copyToClipBoard = () => {
@@ -152,7 +94,7 @@ class Form extends React.Component {
                   ? "form-control is-invalid"
                   : "form-control"
               }
-              placeholder="https://www..."
+              placeholder="https://www.google.com"
             />
           </div>
           <div
@@ -164,7 +106,7 @@ class Form extends React.Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="basic-url">Your Mini URL</label>
+            <label htmlFor="basic-url">Your Short URL</label>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <span className="input-group-text">vincekimdomain.com/</span>
@@ -179,7 +121,7 @@ class Form extends React.Component {
                     : "form-control"
                 }
                 type="text"
-                placeholder="eg. 3fwias (Optional)"
+                placeholder="AoqXuq"
               />
             </div>
             <div
