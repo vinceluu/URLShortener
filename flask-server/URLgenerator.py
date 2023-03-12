@@ -3,7 +3,7 @@ import string
 import random
 
 
-def generate_short_url(longURL: str):
+def generate_short_url(longURL: str) -> str:
     alphabet = list(string.ascii_letters)
     counter = 0
     shortURL = ""
@@ -12,12 +12,9 @@ def generate_short_url(longURL: str):
         shortURL = shortURL + random.choice(alphabet)
         counter = counter + 1
     
-    print(shortURL)
+    return shortURL
 
 generate_short_url("www.google.com")
-
-
-
 
 
 #Notes:
