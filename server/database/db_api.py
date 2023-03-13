@@ -10,7 +10,7 @@ class DbApi:
                                                        database='sql9605105',
                                                        user='sql9605105',
                                                        password='m8yprJWXw3')
-            if self._connection.is_connected():
+            if self._connection.is_connected(): #If its private make it _connection
                 db_Info = self._connection.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)
             self._cursor = self._connection.cursor()
@@ -33,6 +33,19 @@ class DbApi:
         for table_name in self._cursor:
             print(table_name)
 
+    #Implement insertURL: Needs shortURL, longURL. Insert a whole row into the DB
+    def insert_URL(self, shortURL: str, longURL: str):
+        query = f"INSERT INTO URL_Table (long_url, short_url) VALUES ('{longURL}', '{shortURL}')" #f will format it to a string
+        print(query)
+        self._cursor.execute(query) 
+
+    def query_all_URL(self):
+        self._cursor.execute("SELECT * FROM URL_Table") #self._cursor has all of the rows from URL_Table
+        print("Getting all rows from URL table")
+        myresult = self._cursor.fetchall()
+
+        for row in myresult:
+            print(row)
 
 # try:
 #     connection = mysql.connector.connect(host='sql9.freesqldatabase.com',
@@ -44,7 +57,7 @@ class DbApi:
 #         print("Connected to MySQL Server version ", db_Info)
 #         cursor = connection.cursor()
 
-#         cursor.execute("SHOW TABLES")
+#         cursor.execute("SHOW TABLES") #SHOW TABLES is a SQL query
 
 #         for table_name in cursor:
 #             print(table_name)
