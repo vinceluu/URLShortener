@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
 
 * {
   box-sizing: border-box;
@@ -75,5 +75,5 @@ html,
 }
 
 .generatedurl span {
-  font-family: "Fira Sans", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
