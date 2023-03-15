@@ -10,7 +10,7 @@ class DbApi:
                                                        database='sql9605105',
                                                        user='sql9605105',
                                                        password='m8yprJWXw3')
-            if self._connection.is_connected(): #If its private make it _connection
+            if self._connection.is_connected():  # If its private make it _connection
                 db_Info = self._connection.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)
             self._cursor = self._connection.cursor()
@@ -33,19 +33,46 @@ class DbApi:
         for table_name in self._cursor:
             print(table_name)
 
-    #Implement insertURL: Needs shortURL, longURL. Insert a whole row into the DB
-    def insert_URL(self, shortURL: str, longURL: str):
-        query = f"INSERT INTO URL_Table (long_url, short_url) VALUES ('{longURL}', '{shortURL}')" #f will format it to a string
+    # Implement insertURL: Needs shortURL, longURL. Insert a whole row into the DB
+    def insert_url(self, shortURL: str, longURL: str):
+        # f will format it to a string
+        query = f"INSERT INTO URL_Table (long_url, short_url) VALUES ('{longURL}', '{shortURL}')"
         print(query)
-        self._cursor.execute(query) 
+        self._cursor.execute(query)
 
-    def query_all_URL(self):
-        self._cursor.execute("SELECT * FROM URL_Table") #self._cursor has all of the rows from URL_Table
+    def query_all_url(self):
+        # self._cursor has all of the rows from URL_Table
+        self._cursor.execute("SELECT * FROM URL_Table")
         print("Getting all rows from URL table")
         myresult = self._cursor.fetchall()
 
         for row in myresult:
             print(row)
+
+    # create query_all_shorturl
+
+    def long_url_exists(self, long_url: str) -> str | None:
+        # if long url exists it should return short url
+        checkLongURL = f"SELECT long_url, short_url FROM URL_Table WHERE long_url= '{long_url}'"
+        # print(checkLongURL)
+        self._cursor.execute(checkLongURL)
+        myResult = self._cursor.fetchall()
+        # print(myResult)
+        if self._cursor.rowcount != 0:
+            return myResult[0][1]
+        else:
+            return None
+
+    def short_url_exists(self, short_url: str) -> bool:
+        # select * from where short_url (column) == short_url (value that they are passing)
+        checkShortURL = f"SELECT short_url FROM URL_Table WHERE short_url = '{short_url}'"
+        self._cursor.execute(checkShortURL)
+        myResult = self._cursor.fetchall()
+        if self._cursor.rowcount != 0:
+            return True
+        else:
+            return False
+
 
 # try:
 #     connection = mysql.connector.connect(host='sql9.freesqldatabase.com',
