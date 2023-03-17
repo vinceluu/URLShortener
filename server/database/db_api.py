@@ -63,15 +63,15 @@ class DbApi:
         else:
             return None
 
-    def short_url_exists(self, short_url: str) -> bool:
+    def short_url_exists(self, short_url: str) -> str | None:
         # select * from where short_url (column) == short_url (value that they are passing)
-        checkShortURL = f"SELECT short_url FROM URL_Table WHERE short_url = '{short_url}'"
+        checkShortURL = f"SELECT long_url, short_url FROM URL_Table WHERE short_url = '{short_url}'"
         self._cursor.execute(checkShortURL)
         myResult = self._cursor.fetchall()
         if self._cursor.rowcount != 0:
-            return True
+            return myResult[0][0]
         else:
-            return False
+            return None
 
 
 # try:

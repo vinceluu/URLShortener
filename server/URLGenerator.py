@@ -26,9 +26,17 @@ class URLGenerator:
                 return short_url_if_long_url
             else:
                 new_short_url = self._generate_short_url(longURL)
-                while db.short_url_exists(new_short_url):
+                while db.short_url_exists(new_short_url) != None:
                     new_short_url = self._generate_short_url(longURL)
 
                 db.insert_url(new_short_url, longURL)
 
         return new_short_url
+
+    def short_url_exists(self, short_url: str) -> str | None:
+        with DbApi() as db:
+            long_url = db.short_url_exists(short_url)
+            if long_url == None:
+                return None
+            else:
+                return long_url
