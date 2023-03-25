@@ -7,9 +7,9 @@ class DbApi:
     def __init__(self):
         try:
             self._connection = mysql.connector.connect(host='sql9.freesqldatabase.com',
-                                                       database='sql9605105',
-                                                       user='sql9605105',
-                                                       password='m8yprJWXw3')
+                                                       database='sql9608550',
+                                                       user='sql9608550',
+                                                       password='vTY2Vfci4P')
             if self._connection.is_connected():  # If its private make it _connection
                 db_Info = self._connection.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)

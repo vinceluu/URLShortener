@@ -1,16 +1,18 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, jsonify
 from URLGenerator import URLGenerator
 
 app = Flask(__name__)
 url_generator = URLGenerator()
 
 
-@app.get("/create_short_url")
-def create_short_url():  # TODO Edit parameters
+@app.get("/create_short_url/<string:long_url>")
+def create_short_url(long_url):  # TODO Edit parameters
     # TODO Check valid long_url
     short_url = url_generator.insert_short_url(
-        "www.youtube.com")  # TODO Edit this to be variable
-    return short_url
+        long_url)
+    print("This was called")
+    print(short_url)
+    return jsonify({"response": short_url})
 
 
 @app.get("/<string:short_url>")
@@ -21,6 +23,11 @@ def redirect_short_url(short_url: str):
         return redirect(new_long_url)
     else:
         return "404 Short URL Not Found"
+
+
+@app.get("/data")
+def home():
+    return jsonify({"response": "hello"})
 
 
 def main():
